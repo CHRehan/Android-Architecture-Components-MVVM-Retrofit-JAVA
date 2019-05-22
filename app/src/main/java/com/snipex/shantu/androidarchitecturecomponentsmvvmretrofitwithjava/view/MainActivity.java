@@ -16,7 +16,7 @@ import com.snipex.shantu.androidarchitecturecomponentsmvvmretrofitwithjava.view_
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView my_recycler_view;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private MovieArticleAdapter adapter;
     private ArrayList<Article> articleArrayList = new ArrayList<>();
-    ArticleViewModel articleViewModel;
+
 
 
     @Override
@@ -57,9 +57,6 @@ public class MainActivity extends AppCompatActivity {
         // adapter
         adapter = new MovieArticleAdapter(MainActivity.this, articleArrayList);
         my_recycler_view.setAdapter(adapter);
-
-        // View Model
-        articleViewModel = ViewModelProviders.of(this).get(ArticleViewModel.class);
     }
 
     /**
@@ -68,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
      * @param @null
      */
     private void getMovieArticles() {
-        articleViewModel.getArticleResponseLiveData().observe(this, articleResponse -> {
+        getViewModel().getArticleResponseLiveData()
+                .observe(this, articleResponse -> {
             if (articleResponse != null) {
 
                 progress_circular_movie_article.setVisibility(View.GONE);
-                List<Article> articles = articleResponse.getArticles();
-                articleArrayList.addAll(articles);
+                articleArrayList.addAll(articleResponse.getArticles());
                 adapter.notifyDataSetChanged();
             }
         });
